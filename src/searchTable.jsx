@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 
-export default function App() {
+export default function SearchTable() {
   const names = [
     "Alice", "Bob", "Charlie", "David", "Eve",
     "Frank", "Grace", "Hank", "Ivy", "Jack",
