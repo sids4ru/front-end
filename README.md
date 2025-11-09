@@ -1,5 +1,8 @@
 # React Practice Challenges
 
+📚 **[Start with the Foundation Guide](./fundamentals/foundation.md)** - A comprehensive 4-day interview preparation guide for senior frontend engineers covering JavaScript fundamentals, React advanced concepts, and system design.
+
+
 This repository contains advanced React challenges designed to test various aspects of React development, from component composition to performance optimization.
 
 ## Challenges
