@@ -2,6 +2,10 @@
 
 📚 **[Start with the Foundation Guide](./fundamentals/foundation.md)** - A comprehensive 4-day interview preparation guide for senior frontend engineers covering JavaScript fundamentals, React advanced concepts, and system design.
 
+📄 **[React Interview Guide PDF](./fundamentals/ReactInterviewGuide-shruti.pdf)** - Use this PDF from Shruti to get complete list of React questions
+
+🎥 **[React Interview Preparation Video](https://www.youtube.com/watch?v=QafTMBWwbLU&t=306s)** - Shruti's comprehensive video guide for React interview preparation
+
 
 This repository contains advanced React challenges designed to test various aspects of React development, from component composition to performance optimization.
 
