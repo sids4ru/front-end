@@ -1,117 +1,115 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 
-const ITEM_HEIGHT = 150;
-const VISIBLE_COUNT = 8;
+const styles = {
+  container: {
+    height: "500px",
+    width: "300px",
+    overflowY: "auto",
+    border: "1px solid #ccc",
+    position: "relative",
+  },
+  inner: {
+    position: "relative",
+  },
+  row: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    height: "70px",
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    padding: "8px",
+    borderBottom: "1px solid #eee",
+    boxSizing: "border-box",
+  },
+  img: {
+    width: "50px",
+    height: "50px",
+    borderRadius: "50%",
+    background: "#f0f0f0",
+  },
+  placeholder: {
+    width: "50px",
+    height: "50px",
+    borderRadius: "50%",
+    background: "#eee",
+  },
+  name: {
+    fontSize: "14px",
+  },
+};
 
-function VirtualizedList({ items }) {
-  const containerRef = useRef(null);
-  const [scrollTop, setScrollTop] = useState(0);
+const LazyImage = ({ src, alt }) => {
+  const [visible, setVisible] = React.useState(false);
+  const imgRef = React.useRef();
 
-  const startIndex = Math.floor(scrollTop / ITEM_HEIGHT);
-  const endIndex = Math.min(startIndex + VISIBLE_COUNT, items.length);
-  const visibleItems = items.slice(startIndex, endIndex);
-
-  const totalHeight = items.length * ITEM_HEIGHT;
-  const offsetY = startIndex * ITEM_HEIGHT;
-
-  return (
-    <div
-      ref={containerRef}
-      onScroll={(e) => setScrollTop(e.target.scrollTop)}
-      style={{
-        height: VISIBLE_COUNT * ITEM_HEIGHT,
-        overflowY: "auto",
-        border: "1px solid #ccc",
-      }}
-    >
-      <div style={{ position: "relative", height: totalHeight }}>
-        <div
-          style={{
-            transform: `translateY(${offsetY}px)`,
-            position: "absolute",
-            width: "100%",
-          }}
-        >
-          {visibleItems.map((item) => (
-            <ListItem key={item.id} item={item} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ListItem({ item }) {
-  const imgRef = useRef();
-  const [visible, setVisible] = useState(false);
-
-  // Lazy load image
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setVisible(true);
+        observer.disconnect();
+      }
+    });
     if (imgRef.current) observer.observe(imgRef.current);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div
-      ref={imgRef}
-      style={{
-        height: ITEM_HEIGHT - 10,
-        margin: "5px 0",
-        display: "flex",
-        alignItems: "center",
-        borderBottom: "1px solid #eee",
-        padding: "8px",
-        background: "#fafafa",
-      }}
-    >
+    <div ref={imgRef}>
       {visible ? (
-        <img
-          src={`https://picsum.photos/id/${item.id}/120/80`}
-          alt=""
-          style={{ borderRadius: 4, marginRight: 10 }}
-        />
+        <img src={src} alt={alt} style={styles.img} loading="lazy" />
       ) : (
-        <div
-          style={{
-            width: 120,
-            height: 80,
-            background: "#ddd",
-            marginRight: 10,
-            borderRadius: 4,
-          }}
-        />
+        <div style={styles.placeholder} />
       )}
-      <div>
-        <strong>{item.title}</strong>
-        <p style={{ margin: 0, fontSize: 12, color: "#555" }}>
-          Item #{item.id}
-        </p>
-      </div>
     </div>
   );
-}
+};
 
-export default function ImageList() {
-  const items = Array.from({ length: 1000 }, (_, i) => ({
-    id: i + 1,
-    title: `Photo ${i + 1}`,
-  }));
+export default function VirtualizedList() {
+  const itemCount = 10000;
+  const itemHeight = 70;
+  const viewportHeight = 500;
+  const overscan = 5;
+
+  const [scrollTop, setScrollTop] = React.useState(0);
+
+  const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
+  const endIndex = Math.min(
+    itemCount - 1,
+    Math.floor((scrollTop + viewportHeight) / itemHeight) + overscan
+  );
+
+  const visibleItems = [];
+  for (let i = startIndex; i <= endIndex; i++) {
+    visibleItems.push(i);
+  }
+
+  const handleScroll = (e) => {
+    setScrollTop(e.target.scrollTop);
+  };
 
   return (
-    <div style={{ padding: 20, fontFamily: "sans-serif" }}>
-      <h3>🪄 Virtualized List with Lazy Image Loading</h3>
-      <VirtualizedList items={items} />
+    <div style={styles.container} onScroll={handleScroll}>
+      <div
+        style={{
+          ...styles.inner,
+          height: `${itemCount * itemHeight}px`,
+        }}
+      >
+        {visibleItems.map((index) => {
+          const top = index * itemHeight;
+          return (
+            <div key={index} style={{ ...styles.row, top }}>
+              <LazyImage
+                src={`https://randomuser.me/api/portraits/men/${index % 100}.jpg`}
+                alt={`User ${index + 1}`}
+              />
+              <span style={styles.name}>User {index + 1}</span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
