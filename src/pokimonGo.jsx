@@ -26,6 +26,7 @@ export default function PokimonGo(){
       }
       catch(e){
         setError(true);
+        console.log(e);
       }
       finally{
         setLoading(false);
@@ -55,6 +56,7 @@ export default function PokimonGo(){
       }
       catch(e){
         setError(true);
+        console.log(e);
       }
       finally{
         setLoading(false);
@@ -63,7 +65,7 @@ export default function PokimonGo(){
     loadPokimon();
   },[pokimons])
   return(<>
-  <div style={styles.container}>Hi</div>
+  <div style={styles.container}>
   {pokimons.map((pk,index)=>(
     <div key={pk.name} >
     <div>{pk.name}</div>
@@ -72,6 +74,7 @@ export default function PokimonGo(){
   ))}
   {loading && <div>LOADING ... </div>}
   {error && <div>ERROR IN LOADING Image</div>}
+  </div>
   </>)
 }
 const styles = {
