@@ -37,18 +37,18 @@ Build a Dynamic Form Generator that takes a JSON schema as input and renders a c
 
 ---
 
-### 2. Infinite Scroll with Caching (Performance + API Handling)
+  ### 2. Infinite Scroll with Caching (Performance + API Handling)
 
-**Challenge:**
-Implement an infinite scroll component fetching data from an API (e.g., https://jsonplaceholder.typicode.com/posts) that:
-- Loads more data as the user scrolls
-- Caches previously loaded pages
-- Shows loading skeletons
-- Handles API errors gracefully
+  **Challenge:**
+  Implement an infinite scroll component fetching data from an API (e.g., https://jsonplaceholder.typicode.com/posts) that:
+  - Loads more data as the user scrolls
+  - Caches previously loaded pages
+  - Shows loading skeletons
+  - Handles API errors gracefully
 
-**What it tests:**
-- Knowledge of useEffect, intersection observers, memoization, and custom hooks
-- Understanding of performance optimization and network efficiency
+  **What it tests:**
+  - Knowledge of useEffect, intersection observers, memoization, and custom hooks
+  - Understanding of performance optimization and network efficiency
 
 ---
 
